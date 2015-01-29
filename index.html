@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title of the document</title>
+    <style>
+        #viewport {
+            border: 1px black solid;
+        }
+    </style>
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+<canvas id="viewport" width="800" height="600"></canvas>
+<br style="clear:both"/>
+<table>
+    <tr>
+        <td>Brush color:</td>
+        <td><input type="color" id="brush-color" size="10" value="red"/></td>
+    </tr>
+    <tr>
+        <td>Brush radius:</td>
+        <td><input type="number" id="brush-radius" step="1" min="1" size="10" value="10"/></td>
+    </tr>
+    <tr>
+        <td><input type="button" id="brush-apply" value="Apply settings"/></td>
+    </tr>
+</table>
+
+</body>
+
+</html>
