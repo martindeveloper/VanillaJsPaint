@@ -8,6 +8,11 @@ window.addEventListener("load", function () {
     app.Start();
 }, false);
 
+var BrushTypeEnum = {
+    circle: 0,
+    rect: 1
+};
+
 var Application = function (canvas, context) {
     return {
         canvas: canvas,
@@ -22,7 +27,8 @@ var Application = function (canvas, context) {
         },
         brush: {
             color: "red",
-            radius: 10
+            radius: 10,
+            type: BrushTypeEnum.circle
         },
 
         CalculateMousePosition: function (event) {
@@ -45,6 +51,15 @@ var Application = function (canvas, context) {
             document.getElementById("brush-apply").addEventListener("click", function (event) {
                 this.brush.color = document.getElementById("brush-color").value;
                 this.brush.radius = document.getElementById("brush-radius").value | 0;
+
+                switch (document.getElementById("brush-type").value | 0) {
+                    case 0:
+                        this.brush.type = BrushTypeEnum.circle;
+                        break;
+                    case 1:
+                        this.brush.type = BrushTypeEnum.rect;
+                        break;
+                }
             }.bind(this));
         },
 
@@ -69,13 +84,31 @@ var Application = function (canvas, context) {
 
         Draw: function () {
             if (this.mouse.isDown) {
-                this.DrawFilledCircle(this.mouse.position, this.brush.radius, this.brush.color);
+                if(this.brush.type == BrushTypeEnum.circle) {
+                    this.DrawFilledCircle(this.mouse.position, this.brush.radius, this.brush.color);
+                }
+
+                if(this.brush.type == BrushTypeEnum.rect) {
+                    this.DrawFilledRect(this.mouse.position, this.brush.radius, this.brush.radius, this.brush.color);
+                }
             }
+
+            // Draw coloring every frame - coloring needs to be on top of user drawing
+            // Alt you can use second canvas or image element over canvas
+            this.context.drawImage(document.getElementById("canvas-coloring-source"), 0, 0, 800, 600);
         },
 
         DrawFilledCircle: function (position, radius, color) {
             this.context.beginPath();
             this.context.arc(position.x, position.y, radius, 0, Math.PI * 2, true);
+            this.context.closePath();
+            this.context.fillStyle = color;
+            this.context.fill();
+        },
+
+        DrawFilledRect: function (position, width, height, color) {
+            this.context.beginPath();
+            this.context.rect(position.x - (width / 2), position.y - (height / 2), width, height);
             this.context.closePath();
             this.context.fillStyle = color;
             this.context.fill();
