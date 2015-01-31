@@ -30,6 +30,7 @@ var Application = function (canvas, context) {
             radius: 10,
             type: BrushTypeEnum.circle
         },
+        coloringElement: undefined,
 
         CalculateMousePosition: function (event) {
             var rect = this.canvas.getBoundingClientRect();
@@ -42,6 +43,8 @@ var Application = function (canvas, context) {
             console.log("Starting application");
 
             this.lastUpdateTime = Date.now();
+            this.coloringElement = document.getElementById("canvas-coloring-source");
+
             this.RegisterMouseEvents();
             this.RegisterSettingsEvents();
             this.DoFrame();
@@ -95,7 +98,7 @@ var Application = function (canvas, context) {
 
             // Draw coloring every frame - coloring needs to be on top of user drawing
             // Alt you can use second canvas or image element over canvas
-            this.context.drawImage(document.getElementById("canvas-coloring-source"), 0, 0, 800, 600);
+            this.context.drawImage(this.coloringElement, 0, 0, 800, 600);
         },
 
         DrawFilledCircle: function (position, radius, color) {
